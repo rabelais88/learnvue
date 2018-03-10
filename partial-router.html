@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router Sample</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>    
+    <script>
+      window.onload = () => {
+
+        var Body = {template: '<div>this is main content</div>'}
+        var Header = {template: '<div>this is header</div>'}
+        var Footer = {template: '<div>this is footer</div>'}
+        var BodyProfile = {template:'<div>this is profile page</div>'}
+
+        var router = new VueRouter ({
+          routes:[
+            {
+              path:'/',
+              components:{
+                default:Body,
+                header:Header,
+                footer:Footer
+              }
+            },
+            {
+              path:'/profile',
+              components:{
+                default:BodyProfile,
+                header:Header,
+                footer:Footer
+              }
+            }
+          ]
+        });
+
+        //this substitutes el:'#idName' property
+        //official methodology from vue-router
+        var app = new Vue({router}).$mount('#app')
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <router-link to="/">go to Main</router-link>
+      <router-link to="/profile">see profile</router-link>
+      <router-view name="header"></router-view>
+      <router-view></router-view>
+      <router-view name="footer"></router-view>
+    </div>
+  </body>
+</html>

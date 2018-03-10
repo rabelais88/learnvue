@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- replace this with minified version later -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.js"></script>
+    <script>
+      window.onload = function(){
+        Vue.config.devtools = true;
+        console.log('app is on!')
+
+        //local component --> must be re-declared inside another component
+        var compMini = {
+          template: '<div>this is mini component!2</div>'
+        }
+
+        //global component --> reusable without re-declaration
+        Vue.component('my-component',{
+          template:'<div>this is global component!</div>'
+        })
+
+        var compComm = {
+          template:'<div>this is a component with data: {{ dataNumber }}</div>',
+          data: ()=> {
+            return {
+              dataNumber:100
+            }
+          }
+        }
+
+        var compComm2 = {
+          template: '<div>this is a component with shared data: {{ dataShared }}</div>',
+          data: ()=>{
+            return{
+              dataShared:compComm.data.dataNumber
+            }
+          }
+        }
+
+        var appTest = new Vue({
+          el:'#app',
+          data:{
+            message:' hello world! '
+          },
+          beforeCreate: () => {
+            console.log('before create')
+          },
+          created: ()=>{
+            console.log('created')
+          },
+          mounted: ()=>{
+            console.log('mounted')
+          },
+          updated: ()=>{
+            console.log('updated')
+          },
+          components:{
+            'mini-component':compMini,
+            'comm':compComm,
+            'comm2':compComm2
+          }
+        })
+
+        new Vue({
+          el:'#app2'
+        })
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">{{message}}
+      <button>add a component</button>
+      <my-component></my-component>
+      <mini-component></mini-component>
+      <comm></comm>
+      <comm2></comm2>
+    </div>
+    <div id="app2">
+      <my-component></my-component>
+
+    </div>
+  </body>
+</html>

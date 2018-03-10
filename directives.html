@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router Sample</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.js"></script>
+    <script>
+      window.onload = () => {
+        new Vue({
+          el:'#app',
+          data:{
+            flag:false,
+            fruits:['banana','kiwi','watermelon'],
+            uid:'randomid',
+            currentAmount:0
+          },
+          methods:{
+            alertMsg:function(){
+              alert('this is an alert!');
+              this.$data.flag = !this.$data.flag
+              this.$data.currentAmount ++
+            }
+          },
+          //이 부분은 자동으로 반영된다
+          computed:{
+            curAmnt: function(){
+              return '총 횟수: ' + this.currentAmount + '번'
+            }
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <a v-if="flag">this will be deleted</a>
+      <ul>
+        <li v-for="el in fruits">{{el}}</li>
+      </ul>
+      <p v-show="flag">this will be hidden, but remains</p>
+      <h5 v-bind:id="uid">check this object's id</h5>
+      <p>current click - {{ curAmnt }}</p>
+      <button v-on:click="alertMsg">alert me</button>
+    </div>
+  </body>
+</html>

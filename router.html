@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router Sample</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>    
+    <script>
+      window.onload = () => {
+        var Main = { template: '<div> this is main page </div>'};
+        var Login = { template: '<div> this is login page </div>'};
+        var mainDetail = {template: '<div> this is main page details </div>'};
+
+        var routes = [
+          { path: '/main', component: Main
+          , children:[{path:'sub',component:mainDetail}]},
+          { path: '/login', component: Login}
+        ];
+
+        var router = new VueRouter ({
+          routes
+        });
+
+        //this substitutes el:'#idName' property
+        //official methodology from vue-router
+        var app = new Vue({router}).$mount('#app')
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>vue router</h1>
+      <p>
+        <router-link to="/main">go to Main</router-link>
+        <router-link to="/login">go to Login</router-link>
+      </p>
+      <router-view></router-view>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- replace this with minified version later -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.js"></script>
+    <script>
+      window.onload = function(){
+        //shouldn't use camelcase for component name
+        Vue.component('compchild',{
+          props:['propsdata'],
+          template: '<p>{{ propsdata }}</p>'
+        });
+
+        //eventBus is empty Vue object for exchanging data
+        var eventBus = new Vue();
+
+        new Vue({
+          el:'#app',
+          data:{
+            msg:'Hello Vue!'
+          },
+          created:function(){
+            eventBus.$on('callUnrelated',function(value){
+              console.log('data received form other object',value)
+            })
+          }
+        });
+
+        Vue.component('comp-child2',{
+          template:'<button v-on:click="callParent">call parent event</button>',
+          methods:{
+            //shouldn't use fat arrows. this changes lexical scope
+            callParent:function (){
+              this.$emit('printmsg') //parent method is called from here!!
+            }
+          }
+        })
+
+        Vue.component('comp-child3',{
+          template:'<button v-on:click="callOther">call other object</button>',
+          methods:{
+            callOther:function(){
+              eventBus.$emit('callUnrelated',120)
+            }
+          }
+        })
+
+        var app2 = new Vue({
+          el:'#app2',
+          data:{
+            message:'data received',
+            template:'<div>check the console log!</div>'
+          },
+          methods:{
+            printMsg:function (){
+              console.log(this.$data.message)
+            }
+          }
+        })
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- because it's not JSX, prop variables must be referred as text,
+      it's also safer this way. only drawback is recognition... -->
+    <div id="app">
+      <p>this shows communication between parent and child</p>
+      <compchild v-bind:propsdata="msg"></compchild>
+    </div>
+
+    <div id="app2">
+      <comp-child2 v-on:printmsg="printMsg"></comp-child2>
+      <comp-child3></comp-child3>
+    </div>
+
+  </body>
+</html>
